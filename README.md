@@ -1,6 +1,6 @@
-# annulus
+# Annulus
 
-> Annulus, sector, rectangle, circle &amp; other elements.
+> Annulus, sector, rectangle, circle and other elements.
 
 [![NPM](https://img.shields.io/npm/v/annulus.svg)](https://www.npmjs.com/package/annulus) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -16,7 +16,6 @@ npm install --save annulus
 import React, { Component } from 'react'
 
 import MyComponent from 'annulus'
-import 'annulus/dist/index.css'
 
 class Example extends Component {
   render() {
@@ -27,4 +26,4 @@ class Example extends Component {
 
 ## License
 
-MIT © [dubs-se](https://github.com/dubs-se)
+MIT © [degeer](https://github.com/degeer)
