@@ -9,14 +9,11 @@ export const Annulus = ({
   outerRadius,
   ...rest
 }) => {
-  let tau = (2 * Math.PI) / 360
-  let arcGenerator = arc()
-
   return (
     <path
-      d={arcGenerator({
-        startAngle: angleFrom * tau,
-        endAngle: angleTo * tau,
+      d={arc()({
+        startAngle: (angleFrom * Math.PI) / 180,
+        endAngle: (angleTo * Math.PI) / 180,
         innerRadius: innerRadius,
         outerRadius: outerRadius
       })}
@@ -100,93 +97,12 @@ export const Rectangle = ({ width, height, ...rest }) => {
   )
 }
 
-export const Sector = ({
-  angleFrom,
-  angleTo,
-  innerRadius,
-  outerRadius,
-  ...rest
-}) => {
-  innerRadius = 0
+export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
+  let innerRadius = 0
   return Annulus({ angleFrom, angleTo, innerRadius, outerRadius, ...rest })
 }
 
-// function generateDots(angle = false, columns, innerRadius = false) {
-//   let tau = Math.PI / 180
-
-//   let circles = []
-//   for (let y = innerRadius ? 4 : 0; y < columns; y++) {
-//     let max = y == 0 ? 1 : y * 6
-//     let row = []
-
-//     for (let x = 0; x < max; x++) {
-//       let calc = (1 + x) / max
-//       if (angle === false) {
-//         row.push({
-//           x: Math.cos(2 * Math.PI * calc) * y,
-//           y: Math.sin(2 * Math.PI * calc) * y
-//         })
-//       } else {
-//         if (calc <= 0.5 || calc === 1) {
-//           row.push({
-//             x: Math.cos(2 * Math.PI * calc + (angle - 90) * tau) * y,
-//             y: Math.sin(2 * Math.PI * calc + (angle - 90) * tau) * y
-//           })
-//         }
-//       }
-//     }
-//     circles.push(row)
-//   }
-
-//   return circles
-// }
-
-// function generateArcDots(angle, columns) {
-//   let circles = []
-//   for (let y = 0; y < 13; y++) {
-//     let row = []
-
-//     for (let x = 0; x < columns; x++) {
-//       row.push({
-//         x: -x - 4,
-//         y: y - 12
-//       })
-//     }
-//     circles.push(row)
-//   }
-
-//   for (let y = 4; y < columns + 4; y++) {
-//     let max = y == 0 ? 1 : y * 6
-//     let row = []
-
-//     for (let x = 0; x < max; x++) {
-//       let calc = (1 + x) / max
-//       if (360 * calc >= 0 && 360 * calc < 180) {
-//         row.push({
-//           x: Math.cos(2 * Math.PI * calc) * y,
-//           y: Math.sin(2 * Math.PI * calc) * y
-//         })
-//       }
-//     }
-//     circles.push(row)
-//   }
-
-//   for (let y = 0; y < 13; y++) {
-//     let row = []
-
-//     for (let x = 0; x < columns; x++) {
-//       row.push({
-//         x: x + 4,
-//         y: y - 12
-//       })
-//     }
-//     circles.push(row)
-//   }
-
-//   return circles
-// }
-
-function returnDots(circles, distance, radius, rest) {
+function returnDots(circles, distance, dotsRadius, rest) {
   return (
     <g key={`dots`} {...rest}>
       {circles.map(({}, row) => {
@@ -196,7 +112,7 @@ function returnDots(circles, distance, radius, rest) {
               return (
                 <circle
                   key={`dot-column-${row}-${column}`}
-                  r={radius}
+                  r={dotsRadius}
                   cx={circle.x * distance}
                   cy={circle.y * distance}
                 />
@@ -209,43 +125,230 @@ function returnDots(circles, distance, radius, rest) {
   )
 }
 
-// export const AnnulusDots = ({
-//   angleFrom,
-//   angleTo,
-//   innerRadius,
-//   outerRadius,
-//   ...rest
-// }) => {
-//   let angle = 180
-//   let columns = 13
-//   let box = 64
+export const AnnulusDots = ({
+  angleFrom,
+  angleTo,
+  innerRadius,
+  outerRadius,
+  distance,
+  ...rest
+}) => {
+  let firstColumn = innerRadius / distance
+  let columns = outerRadius / distance
+  let dotsRadius = distance / 6
+  let circles = innerRadius === 0 ? [[{ x: 0, y: 0 }]] : []
 
-//   let circles = generateDots(angle, columns, true)
+  if (angleFrom < 0) {
+    angleFrom = 360 + angleFrom
+  }
 
-//   return returnDots(circles, box, rest)
-// }
+  if (angleTo < 0) {
+    angleTo = 360 + angleTo
+  }
+  for (let y = firstColumn; y <= columns; y++) {
+    let column = []
+    let points = y * 8
 
-export const RectangleDots = ({ width, height, distance, ...rest }) => {
-  // Radius, columns & rows are based distance value
-  let columns = 1 + width / distance
-  let rows = 1 + height / distance
-  let radius = distance / 6
+    for (let x = 0; x < points; x++) {
+      let angle = (360 * x) / points
+
+      if (
+        (angleTo > angleFrom && angle >= angleFrom && angle <= angleTo) ||
+        (angleFrom >= angleTo && (angle >= angleFrom || angle <= angleTo)) ||
+        (angle == 0 && angleTo == 360)
+      ) {
+        column.push({
+          x: y * Math.cos(((angle - 90) * Math.PI) / 180),
+          y: y * Math.sin(((angle - 90) * Math.PI) / 180)
+        })
+      }
+    }
+    if (column.length !== 0) {
+      circles.push(column)
+    }
+  }
+  return returnDots(circles, distance, dotsRadius, rest)
+}
+
+export const ArcDots = ({ box, distance, ...rest }) => {
+  let width = box / 3
+  let height = box / 2
+  let columns = width / distance
+  let rows = height / distance
+  let dotsRadius = distance / 6
 
   let circles = []
-  let rowsStart = (rows - 1) / 2
-  let columnsStart = (columns - 1) / 2
 
-  for (let y = 0; y < rows; y++) {
+  for (let y = 0; y <= rows; y++) {
     let row = []
 
-    for (let x = 0; x < columns; x++) {
+    for (let x = 0; x <= columns; x++) {
       row.push({
-        x: x - columnsStart,
-        y: y - rowsStart
+        x: -x - columns / 2,
+        y: -y
       })
+    }
+
+    circles.push(row)
+  }
+
+  for (let y = rows - columns; y <= rows; y++) {
+    let max = y == 0 ? 1 : y * 6
+    let row = []
+
+    for (let x = 0; x < max; x++) {
+      let calc = (1 + x) / max
+      if (360 * calc >= 0 && 360 * calc < 180) {
+        row.push({
+          x: Math.cos(2 * Math.PI * calc) * y,
+          y: Math.sin(2 * Math.PI * calc) * y
+        })
+      }
     }
     circles.push(row)
   }
 
-  return returnDots(circles, distance, radius, rest)
+  for (let y = 0; y <= rows; y++) {
+    let row = []
+
+    for (let x = 0; x <= columns; x++) {
+      row.push({
+        x: x + columns / 2,
+        y: -y
+      })
+    }
+
+    circles.push(row)
+  }
+
+  return returnDots(circles, distance, dotsRadius, rest)
+}
+
+export const CircleDots = ({ radius, distance, ...rest }) => {
+  let columns = radius / distance
+  let dotsRadius = distance / 6
+
+  let circles = [[{ x: 0, y: 0 }]]
+
+  for (let y = 0; y <= columns; y++) {
+    let column = []
+    let points = y * 8
+
+    for (let x = 0; x < points; x++) {
+      let angle = x / points
+
+      column.push({
+        x: y * Math.sin(Math.PI * 2 * angle),
+        y: y * Math.cos(Math.PI * 2 * angle)
+      })
+    }
+    circles.push(column)
+  }
+  return returnDots(circles, distance, dotsRadius, rest)
+}
+
+export const RectangleDots = ({
+  width,
+  height,
+  distance,
+  inner = false,
+  ...rest
+}) => {
+  let columns = width / distance
+  let rows = height / distance
+  let dotsRadius = distance / 6
+
+  let circles = []
+  let rowsStart = rows / 2
+  let columnsStart = columns / 2
+
+  if (inner) {
+    rows -= 1
+    columns -= 1
+  }
+
+  for (let y = 0; y <= rows; y++) {
+    let row = []
+
+    for (let x = 0; x <= columns; x++) {
+      row.push({
+        x: x - columnsStart + (inner ? 1 / 2 : 0),
+        y: y - rowsStart + (inner ? 1 / 2 : 0)
+      })
+    }
+    circles.push(row)
+  }
+  return returnDots(circles, distance, dotsRadius, rest)
+}
+
+export const SectorDots = ({
+  angleFrom,
+  angleTo,
+  outerRadius,
+  distance,
+  ...rest
+}) => {
+  let innerRadius = 0
+  return AnnulusDots({
+    angleFrom,
+    angleTo,
+    innerRadius,
+    outerRadius,
+    distance,
+    ...rest
+  })
+}
+
+export const RectangleLines = ({
+  width,
+  height,
+  distance,
+  inner = false,
+  ...rest
+}) => {
+  let columns = width / distance
+  let rows = height / distance
+
+  let lines = []
+  let rowsStart = rows / 2
+  let columnsStart = columns / 2
+
+  if (inner) {
+    rows -= 1
+    columns -= 1
+  }
+
+  for (let x = 0; x <= columns; x++) {
+    lines.push({
+      x1: x - columnsStart + (inner ? 1 / 2 : 0),
+      y1: -rows / 2,
+      x2: x - columnsStart + (inner ? 1 / 2 : 0),
+      y2: rows / 2
+    })
+  }
+
+  for (let y = 0; y <= rows; y++) {
+    lines.push({
+      x1: -columns / 2,
+      y1: y - rowsStart + (inner ? 1 / 2 : 0),
+      x2: columns / 2,
+      y2: y - rowsStart + (inner ? 1 / 2 : 0)
+    })
+  }
+
+  return (
+    <g key={`lines`} {...rest}>
+      {lines.map((line, key) => {
+        return (
+          <line
+            key={`line-${key}`}
+            x1={line.x1 * distance}
+            y1={line.y1 * distance}
+            x2={line.x2 * distance}
+            y2={line.y2 * distance}
+          />
+        )
+      })}
+    </g>
+  )
 }
