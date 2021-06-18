@@ -104,7 +104,7 @@ export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
 
 function returnDots(circles, distance, dotsRadius, rest) {
   return (
-    <g key={`dots`} {...rest}>
+    <g key={`dots`}>
       {circles.map(({}, row) => {
         return (
           <g key={`dot-row-${row}`}>
@@ -115,6 +115,7 @@ function returnDots(circles, distance, dotsRadius, rest) {
                   r={dotsRadius}
                   cx={circle.x * distance}
                   cy={circle.y * distance}
+                  {...rest}
                 />
               )
             })}
@@ -131,6 +132,7 @@ export const AnnulusDots = ({
   innerRadius,
   outerRadius,
   distance,
+  inner = false,
   ...rest
 }) => {
   let firstColumn = innerRadius / distance
@@ -145,6 +147,11 @@ export const AnnulusDots = ({
   if (angleTo < 0) {
     angleTo = 360 + angleTo
   }
+
+  if (inner) {
+    columns -= 1
+  }
+
   for (let y = firstColumn; y <= columns; y++) {
     let column = []
     let points = y * 8
@@ -224,11 +231,15 @@ export const ArcDots = ({ box, distance, ...rest }) => {
   return returnDots(circles, distance, dotsRadius, rest)
 }
 
-export const CircleDots = ({ radius, distance, ...rest }) => {
+export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
   let columns = radius / distance
   let dotsRadius = distance / 6
 
   let circles = [[{ x: 0, y: 0 }]]
+
+  if (inner) {
+    columns -= 1
+  }
 
   for (let y = 0; y <= columns; y++) {
     let column = []
@@ -286,6 +297,7 @@ export const SectorDots = ({
   angleTo,
   outerRadius,
   distance,
+  inner = false,
   ...rest
 }) => {
   let innerRadius = 0
