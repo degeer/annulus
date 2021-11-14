@@ -23,16 +23,16 @@ export const Annulus = ({
 }
 
 export const Arc = ({ box, ...rest }) => {
-  let symbolGenerator = symbol()
+  const symbolGenerator = symbol()
     .type({
       draw: function (context, box) {
-        let r = box / 6
+        const r = box / 6
 
-        let a = 0
-        let b = box
-        let c = box / 2 + -r
-        let d = box / 2 + r
-        let e = box / 2
+        const a = 0
+        const b = box
+        const c = box / 2 + -r
+        const d = box / 2 + r
+        const e = box / 2
 
         context.moveTo(a, a)
         context.lineTo(a, e)
@@ -98,13 +98,13 @@ export const Rectangle = ({ width, height, ...rest }) => {
 }
 
 export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
-  let innerRadius = 0
+  const innerRadius = 0
   return Annulus({ angleFrom, angleTo, innerRadius, outerRadius, ...rest })
 }
 
 function returnDots(circles, distance, dotsRadius, rest) {
   return (
-    <g key={`dots`}>
+    <g key='dots'>
       {circles.map(({}, row) => {
         return (
           <g key={`dot-row-${row}`}>
@@ -135,10 +135,10 @@ export const AnnulusDots = ({
   inner = false,
   ...rest
 }) => {
-  let firstColumn = innerRadius / distance
+  const firstColumn = innerRadius / distance
   let columns = outerRadius / distance
-  let dotsRadius = distance / 6
-  let circles = innerRadius === 0 ? [[{ x: 0, y: 0 }]] : []
+  const dotsRadius = distance / 6
+  const circles = innerRadius === 0 ? [[{ x: 0, y: 0 }]] : []
 
   if (angleFrom < 0) {
     angleFrom = 360 + angleFrom
@@ -153,16 +153,16 @@ export const AnnulusDots = ({
   }
 
   for (let y = firstColumn; y <= columns; y++) {
-    let column = []
-    let points = y * 8
+    const column = []
+    const points = y * 8
 
     for (let x = 0; x < points; x++) {
-      let angle = (360 * x) / points
+      const angle = (360 * x) / points
 
       if (
         (angleTo > angleFrom && angle >= angleFrom && angle <= angleTo) ||
         (angleFrom >= angleTo && (angle >= angleFrom || angle <= angleTo)) ||
-        (angle == 0 && angleTo == 360)
+        (angle === 0 && angleTo === 360)
       ) {
         column.push({
           x: y * Math.cos(((angle - 90) * Math.PI) / 180),
@@ -178,16 +178,16 @@ export const AnnulusDots = ({
 }
 
 export const ArcDots = ({ box, distance, ...rest }) => {
-  let width = box / 3
-  let height = box / 2
-  let columns = width / distance
-  let rows = height / distance
-  let dotsRadius = distance / 6
+  const width = box / 3
+  const height = box / 2
+  const columns = width / distance
+  const rows = height / distance
+  const dotsRadius = distance / 6
 
-  let circles = []
+  const circles = []
 
   for (let y = 0; y <= rows; y++) {
-    let row = []
+    const row = []
 
     for (let x = 0; x <= columns; x++) {
       row.push({
@@ -200,11 +200,11 @@ export const ArcDots = ({ box, distance, ...rest }) => {
   }
 
   for (let y = rows - columns; y <= rows; y++) {
-    let max = y == 0 ? 1 : y * 6
-    let row = []
+    const max = y === 0 ? 1 : y * 6
+    const row = []
 
     for (let x = 0; x < max; x++) {
-      let calc = (1 + x) / max
+      const calc = (1 + x) / max
       if (360 * calc >= 0 && 360 * calc < 180) {
         row.push({
           x: Math.cos(2 * Math.PI * calc) * y,
@@ -216,7 +216,7 @@ export const ArcDots = ({ box, distance, ...rest }) => {
   }
 
   for (let y = 0; y <= rows; y++) {
-    let row = []
+    const row = []
 
     for (let x = 0; x <= columns; x++) {
       row.push({
@@ -233,20 +233,20 @@ export const ArcDots = ({ box, distance, ...rest }) => {
 
 export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
   let columns = radius / distance
-  let dotsRadius = distance / 6
+  const dotsRadius = distance / 6
 
-  let circles = [[{ x: 0, y: 0 }]]
+  const circles = [[{ x: 0, y: 0 }]]
 
   if (inner) {
     columns -= 1
   }
 
   for (let y = 0; y <= columns; y++) {
-    let column = []
-    let points = y * 8
+    const column = []
+    const points = y * 8
 
     for (let x = 0; x < points; x++) {
-      let angle = x / points
+      const angle = x / points
 
       column.push({
         x: y * Math.sin(Math.PI * 2 * angle),
@@ -267,11 +267,11 @@ export const RectangleDots = ({
 }) => {
   let columns = width / distance
   let rows = height / distance
-  let dotsRadius = distance / 6
+  const dotsRadius = distance / 6
 
-  let circles = []
-  let rowsStart = rows / 2
-  let columnsStart = columns / 2
+  const circles = []
+  const rowsStart = rows / 2
+  const columnsStart = columns / 2
 
   if (inner) {
     rows -= 1
@@ -279,7 +279,7 @@ export const RectangleDots = ({
   }
 
   for (let y = 0; y <= rows; y++) {
-    let row = []
+    const row = []
 
     for (let x = 0; x <= columns; x++) {
       row.push({
@@ -300,7 +300,7 @@ export const SectorDots = ({
   inner = false,
   ...rest
 }) => {
-  let innerRadius = 0
+  const innerRadius = 0
   return AnnulusDots({
     angleFrom,
     angleTo,
@@ -315,41 +315,47 @@ export const RectangleLines = ({
   width,
   height,
   distance,
+  xLines = true,
+  yLines = true,
   inner = false,
   ...rest
 }) => {
   let columns = width / distance
   let rows = height / distance
 
-  let lines = []
-  let rowsStart = rows / 2
-  let columnsStart = columns / 2
+  const lines = []
+  const rowsStart = rows / 2
+  const columnsStart = columns / 2
 
   if (inner) {
     rows -= 1
     columns -= 1
   }
 
-  for (let x = 0; x <= columns; x++) {
-    lines.push({
-      x1: x - columnsStart + (inner ? 1 / 2 : 0),
-      y1: -rows / 2,
-      x2: x - columnsStart + (inner ? 1 / 2 : 0),
-      y2: rows / 2
-    })
+  if (xLines) {
+    for (let x = 0; x <= columns; x++) {
+      lines.push({
+        x1: x - columnsStart + (inner ? 1 / 2 : 0),
+        y1: -rows / 2,
+        x2: x - columnsStart + (inner ? 1 / 2 : 0),
+        y2: rows / 2
+      })
+    }
   }
 
-  for (let y = 0; y <= rows; y++) {
-    lines.push({
-      x1: -columns / 2,
-      y1: y - rowsStart + (inner ? 1 / 2 : 0),
-      x2: columns / 2,
-      y2: y - rowsStart + (inner ? 1 / 2 : 0)
-    })
+  if (yLines) {
+    for (let y = 0; y <= rows; y++) {
+      lines.push({
+        x1: -columns / 2,
+        y1: y - rowsStart + (inner ? 1 / 2 : 0),
+        x2: columns / 2,
+        y2: y - rowsStart + (inner ? 1 / 2 : 0)
+      })
+    }
   }
 
   return (
-    <g key={`lines`} {...rest}>
+    <g key='lines' {...rest}>
       {lines.map((line, key) => {
         return (
           <line
