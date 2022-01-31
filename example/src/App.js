@@ -6,6 +6,7 @@ import {
   Circle,
   Rectangle,
   Sector,
+  Triangle,
   ArcDots,
   AnnulusDots,
   CircleDots,
@@ -22,13 +23,90 @@ const App = () => {
   }
 
   function position(x, y) {
-    return `translate(${x * elementSize * 0.5 + 32},${
-      y * elementSize * 0.5 + 32
-    })`
+    return `translate(${x * elementSize * 0.5 + 32},${y * elementSize * 0.5 + 32
+      })`
   }
+
+  const color1 = `rgb(193,18,28)`
+  const color2 = `rgb(250,132,43)`
+  const color3 = `rgb(43,44,124)`
+  const color4 = `rgb(245,255,0)`
+  const color5 = `rgb(27,84,44)`
+  const color6 = `#ccc`
+  const color7 = `#215da5`
+  const color8 = `#f7b219`
+  const color9 = `#eee`
+  const color10 = `#000`
 
   return (
     <>
+      <svg viewBox={`0 0 ${size.width + 64} ${size.height + 64}`}>
+        {/* <Annulus
+          angleFrom={15}
+          angleTo={345}
+          innerRadius={elementSize / 3}
+          outerRadius={elementSize}
+          style={{
+            fill: color2
+          }}
+          transform={position(3, 2)}
+        /> */}
+        {/* <Triangle
+          positions={[{ x: 0, y: -3 }, { x: 3, y: 4 }, { x: -6, y: 0 }]}
+          size={elementSize / 3}
+          style={{
+            fill: color3
+          }}
+          transform={position(3, 2)}
+        /> */}
+
+        <Triangle
+          positions={[{ x: 0, y: -3 }, { x: 1, y: 3 }, { x: -1, y: 3 }, { x: -1, y: -3 }]}
+          size={elementSize / 3}
+          style={{
+            fill: color1
+          }}
+          transform={position(3, 2)}
+        />
+
+        <Triangle
+          positions={[{ x: 0, y: -3 }, { x: 1, y: 3 }, { x: -1, y: 3 }, { x: -1, y: -3 }]}
+          size={elementSize / 12}
+          style={{
+            fill: color1
+          }}
+          transform={position(5, 2.5)}
+        />
+
+        <Triangle
+          positions={[{ x: 0, y: -3 }, { x: 1, y: 3 }, { x: -1, y: 3 }, { x: -1, y: -3 }]}
+          size={elementSize / 12}
+          style={{
+            fill: color1
+          }}
+          transform={position((4+2/3), 2.5)}
+        />
+
+        <Triangle
+          positions={[{ x: 0, y: -3 }, { x: 1, y: 3 }, { x: -1, y: 3 }, { x: -1, y: -3 }]}
+          size={elementSize / 12}
+          style={{
+            fill: color1
+          }}
+          transform={position((5+1/3), 2.5)}
+        />
+        <RectangleLines
+          width={size.width}
+          height={size.height}
+          distance={elementSize / 12}
+          style={{
+            stroke: color10,
+            strokeWidth: `1`
+          }}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
+        />
+      </svg>
       <svg viewBox={`0 0 ${size.width + 64} ${size.height + 64}`}>
         <Annulus
           angleFrom={90}
@@ -36,21 +114,21 @@ const App = () => {
           innerRadius={elementSize / 3}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(0, 0)}
         />
         <Arc
           box={elementSize}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(3, 1)}
         />
         <Circle
           radius={elementSize / 2}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
           }}
           transform={position(5, 1)}
         />
@@ -58,7 +136,7 @@ const App = () => {
           width={elementSize}
           height={elementSize}
           style={{
-            fill: `rgb(245,255,0)`
+            fill: color4
           }}
           transform={position(1, 3)}
         />
@@ -67,7 +145,7 @@ const App = () => {
           angleTo={360}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(27,84,44)`
+            fill: color5
           }}
           transform={position(4, 4)}
         />
@@ -77,7 +155,7 @@ const App = () => {
           innerRadius={elementSize / 6}
           outerRadius={elementSize / 2}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(5, 3)}
         />
@@ -86,7 +164,7 @@ const App = () => {
           angleTo={90}
           outerRadius={elementSize / 2}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(5, 4)}
         />
@@ -98,21 +176,21 @@ const App = () => {
           innerRadius={elementSize / 3}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(0, 0)}
         />
         <Arc
           box={elementSize}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(3, 1)}
         />
         <Circle
           radius={elementSize / 2}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
           }}
           transform={position(5, 1)}
         />
@@ -120,7 +198,7 @@ const App = () => {
           width={elementSize}
           height={elementSize}
           style={{
-            fill: `rgb(245,255,0)`
+            fill: color4
           }}
           transform={position(1, 3)}
         />
@@ -129,7 +207,7 @@ const App = () => {
           angleTo={360}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(27,84,44)`
+            fill: color5
           }}
           transform={position(4, 4)}
         />
@@ -139,7 +217,7 @@ const App = () => {
           innerRadius={elementSize / 6}
           outerRadius={elementSize / 2}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(5, 3)}
         />
@@ -148,7 +226,7 @@ const App = () => {
           angleTo={90}
           outerRadius={elementSize / 2}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(5, 4)}
         />
@@ -205,12 +283,11 @@ const App = () => {
           height={size.height}
           distance={elementSize / 24}
           style={{
-            stroke: `#ccc`,
+            stroke: color6,
             strokeWidth: `1`
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
         <AnnulusDots
           angleFrom={90}
@@ -325,21 +402,21 @@ const App = () => {
           innerRadius={elementSize / 3}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(0, 0)}
         />
         <Arc
           box={elementSize}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(3, 1)}
         />
         <Circle
           radius={elementSize / 2}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
           }}
           transform={position(5, 1)}
         />
@@ -347,7 +424,7 @@ const App = () => {
           width={elementSize}
           height={elementSize}
           style={{
-            fill: `rgb(245,255,0)`
+            fill: color4
           }}
           transform={position(1, 3)}
         />
@@ -356,7 +433,7 @@ const App = () => {
           angleTo={360}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(27,84,44)`
+            fill: color5
           }}
           transform={position(4, 4)}
         />
@@ -399,21 +476,21 @@ const App = () => {
           innerRadius={elementSize / 3}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(0, 0)}
         />
         <Arc
           box={elementSize}
           style={{
-            fill: `rgb(250,132,43)`
+            fill: color2
           }}
           transform={position(3, 1)}
         />
         <Circle
           radius={elementSize / 2}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
           }}
           transform={position(5, 1)}
         />
@@ -421,7 +498,7 @@ const App = () => {
           width={elementSize}
           height={elementSize}
           style={{
-            fill: `rgb(245,255,0)`
+            fill: color4
           }}
           transform={position(1, 3)}
         />
@@ -430,7 +507,7 @@ const App = () => {
           angleTo={360}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(27,84,44)`
+            fill: color5
           }}
           transform={position(4, 4)}
         />
@@ -472,7 +549,7 @@ const App = () => {
           angleTo={0}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
           }}
           transform={position(2, 2)}
         />
@@ -482,7 +559,7 @@ const App = () => {
           innerRadius={elementSize / 3}
           outerRadius={elementSize}
           style={{
-            fill: `rgb(193,18,28)`
+            fill: color1
           }}
           transform={position(2, 2)}
         />
@@ -507,7 +584,7 @@ const App = () => {
           width={elementSize * 2}
           height={elementSize * 2}
           style={{
-            fill: `rgb(245,255,0)`
+            fill: color4
           }}
           distance={64}
           transform={position(3, 2)}
@@ -515,7 +592,7 @@ const App = () => {
         <CircleDots
           radius={elementSize}
           style={{
-            fill: `rgb(43,44,124)`
+            fill: color3
             // opacity: `0.5`
           }}
           distance={64}
@@ -528,38 +605,34 @@ const App = () => {
           height={size.height}
           distance={elementSize / 24}
           style={{
-            stroke: `#ccc`,
+            stroke: color6,
             strokeWidth: `1`
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
         <Arc
           box={elementSize}
           style={{
-            fill: `#215da5`
+            fill: color7
           }}
-          transform={`translate(${32 + elementSize / 2 + elementSize / 12}, ${
-            32 + elementSize * 1.25
-          })`}
+          transform={`translate(${32 + elementSize / 2 + elementSize / 12}, ${32 + elementSize * 1.25
+            })`}
         />
         <ArcDots
           box={elementSize}
           distance={elementSize / 24}
-          transform={`translate(${
-            32 + elementSize / 2 + (2 * elementSize) / 3 + elementSize / 12
-          }, ${32 + elementSize * 1.25})`}
+          transform={`translate(${32 + elementSize / 2 + (2 * elementSize) / 3 + elementSize / 12
+            }, ${32 + elementSize * 1.25})`}
         />
         <g
-          transform={`translate(${
-            32 + elementSize / 2 + (5.5 * elementSize) / 3 + elementSize / 12
-          }, ${32 + elementSize * 1.25})`}
+          transform={`translate(${32 + elementSize / 2 + (5.5 * elementSize) / 3 + elementSize / 12
+            }, ${32 + elementSize * 1.25})`}
         >
           <Arc
             box={elementSize}
             style={{
-              fill: `#f7b219`
+              fill: color8
             }}
             transform={`rotate(180)`}
           />
@@ -569,9 +642,8 @@ const App = () => {
           width={elementSize / 3}
           height={elementSize * 1.5}
           distance={elementSize / 24}
-          transform={`translate(${
-            32 + elementSize / 2 + (4.5 * elementSize) / 3 + elementSize / 12
-          }, ${32 + elementSize})`}
+          transform={`translate(${32 + elementSize / 2 + (4.5 * elementSize) / 3 + elementSize / 12
+            }, ${32 + elementSize})`}
         />
       </svg>
       <svg viewBox={`0 0 ${size.width + 64} ${size.height + 64}`}>
@@ -580,22 +652,20 @@ const App = () => {
           height={size.height}
           distance={elementSize / 24}
           style={{
-            fill: `#eee`
+            fill: color9
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
         <RectangleDots
           width={size.width}
           height={size.height}
           distance={elementSize / 8}
           style={{
-            fill: `#ccc`
+            fill: color6
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
         <RectangleDots
           width={size.width}
@@ -603,11 +673,10 @@ const App = () => {
           distance={elementSize / 8}
           inner={true}
           style={{
-            fill: `#ccc`
+            fill: color6
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
       </svg>
       <svg viewBox={`0 0 ${size.width + 64} ${size.height + 64}`}>
@@ -616,12 +685,11 @@ const App = () => {
           height={size.height}
           distance={elementSize / 24}
           style={{
-            stroke: `#000`,
+            stroke: color10,
             strokeWidth: `1`
           }}
-          transform={`translate(${32 + size.width / 2}, ${
-            32 + +size.height / 2
-          })`}
+          transform={`translate(${32 + size.width / 2}, ${32 + +size.height / 2
+            })`}
         />
       </svg>
     </>

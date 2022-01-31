@@ -126,6 +126,31 @@ function returnDots(circles, distance, dotsRadius, rest) {
   )
 }
 
+export const Triangle = ({ positions, size, ...rest }) => {
+
+  let path = 'm' +
+    positions[0].x * size +
+    ',' +
+    positions[0].y * size;
+
+  for (let i = 1; i < positions.length; i++) {
+
+    path +='l' +
+    positions[i].x * size +
+    ',' +
+    positions[i].y * size;
+
+  }
+  path += 'z';
+
+  return (
+    <path
+      d={path
+      }
+      {...rest}
+    />
+  )
+}
 export const AnnulusDots = ({
   angleFrom,
   angleTo,
