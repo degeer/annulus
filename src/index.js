@@ -105,10 +105,10 @@ export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
 function returnDots(circles, distance, dotsRadius, rest) {
   return (
     <g key='dots'>
-      {circles.map(({}, row) => {
+      {circles.map((rowCircles, row) => {
         return (
           <g key={`dot-row-${row}`}>
-            {circles[row].map((circle, column) => {
+            {rowCircles.map((circle, column) => {
               return (
                 <circle
                   key={`dot-column-${row}-${column}`}
@@ -127,30 +127,16 @@ function returnDots(circles, distance, dotsRadius, rest) {
 }
 
 export const Triangle = ({ positions, size, ...rest }) => {
-
-  let path = 'm' +
-    positions[0].x * size +
-    ',' +
-    positions[0].y * size;
+  let path = 'm' + positions[0].x * size + ',' + positions[0].y * size
 
   for (let i = 1; i < positions.length; i++) {
-
-    path +='l' +
-    positions[i].x * size +
-    ',' +
-    positions[i].y * size;
-
+    path += 'l' + positions[i].x * size + ',' + positions[i].y * size
   }
-  path += 'z';
+  path += 'z'
 
-  return (
-    <path
-      d={path
-      }
-      {...rest}
-    />
-  )
+  return <path d={path} {...rest} />
 }
+
 export const AnnulusDots = ({
   angleFrom,
   angleTo,
