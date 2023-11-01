@@ -105,36 +105,47 @@ export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
 function returnDots(circles, distance, dotsRadius, rest) {
   return (
     <g key='dots'>
-      {circles.map((rowCircles, row) => {
-        return (
-          <g key={`dot-row-${row}`}>
-            {rowCircles.map((circle, column) => {
-              return (
-                <circle
-                  key={`dot-column-${row}-${column}`}
-                  r={dotsRadius}
-                  cx={circle.x * distance}
-                  cy={circle.y * distance}
-                  {...rest}
-                />
-              )
-            })}
-          </g>
-        )
-      })}
+      {circles.flatMap((rowCircles, row) => (
+        <g key={`dot-row-${row}`}>
+          {rowCircles.map((circle, column) => (
+            <circle
+              key={`dot-column-${row}-${column}`}
+              r={dotsRadius}
+              cx={circle.x * distance}
+              cy={circle.y * distance}
+              {...rest}
+            />
+          ))}
+        </g>
+      ))}
     </g>
   )
 }
 
 export const Triangle = ({ positions, size, ...rest }) => {
-  let path = 'm' + positions[0].x * size + ',' + positions[0].y * size
-
-  for (let i = 1; i < positions.length; i++) {
-    path += 'l' + positions[i].x * size + ',' + positions[i].y * size
-  }
-  path += 'z'
+  const path =
+    positions
+      .map((position, index) => {
+        const command = index === 0 ? 'm' : 'l'
+        return `${command}${position.x * size},${position.y * size}`
+      })
+      .join('') + 'z'
 
   return <path d={path} {...rest} />
+}
+
+export const Lozenge = ({ width = 1, height = 3, ...rest }) => {
+  return (
+    <Triangle
+      positions={[
+        { x: 0, y: -height },
+        { x: width, y: height },
+        { x: -width, y: height },
+        { x: -width, y: -height }
+      ]}
+      {...rest}
+    />
+  )
 }
 
 export const AnnulusDots = ({
