@@ -2,27 +2,40 @@ import { arc, symbol } from 'd3-shape'
 import React from 'react'
 import svgpath from 'svgpath'
 
+const GeneratePath = (path, round, translate) => {
+  return svgpath(path)
+    .rotate(translate[2])
+    .translate(translate[0], translate[1])
+    .round(round)
+    .toString()
+}
 export const Annulus = ({
   angleFrom,
   angleTo,
   innerRadius,
   outerRadius,
+  round = 2,
+  translate = [0, 0],
   ...rest
 }) => {
   return (
     <path
-      d={arc()({
-        startAngle: (angleFrom * Math.PI) / 180,
-        endAngle: (angleTo * Math.PI) / 180,
-        innerRadius: innerRadius,
-        outerRadius: outerRadius
-      })}
+      d={GeneratePath(
+        arc()({
+          startAngle: (angleFrom * Math.PI) / 180,
+          endAngle: (angleTo * Math.PI) / 180,
+          innerRadius: innerRadius,
+          outerRadius: outerRadius
+        }),
+        round,
+        translate
+      )}
       {...rest}
     />
   )
 }
 
-export const Arc = ({ box, ...rest }) => {
+export const Arc = ({ box, round = 2, translate = [0, 0], ...rest }) => {
   const symbolGenerator = symbol()
     .type({
       draw: function (context, box) {
@@ -54,55 +67,81 @@ export const Arc = ({ box, ...rest }) => {
 
   return (
     <path
-      d={svgpath(symbolGenerator())
-        .translate(-box / 2, -box / 2)
-        .toString()}
+      d={GeneratePath(
+        svgpath(symbolGenerator())
+          .translate(-box / 2, -box / 2)
+          .toString(),
+        round,
+        translate
+      )}
       {...rest}
     />
   )
 }
 
-export const Circle = ({ radius, ...rest }) => {
-  return <circle r={radius} {...rest} />
-}
-
-export const Rectangle = ({ width, height, ...rest }) => {
-  return (
-    <path
-      d={
-        'm' +
-        -(width / 2) +
-        ',' +
-        -(height / 2) +
-        'l' +
-        width +
-        ',' +
-        0 +
-        'l' +
-        0 +
-        ',' +
-        height +
-        'l' +
-        -width +
-        ',' +
-        0 +
-        'l' +
-        0 +
-        ',' +
-        -height +
-        'z'
-      }
+export const Circle = ({ radius, round = 2, translate = [0, 0], ...rest }) => {
+  const circle = (
+    <circle
+      r={radius}
+      cx={translate[0] !== 0 && translate[0]}
+      cy={translate[1] !== 0 && translate[1]}
       {...rest}
     />
   )
+  return circle
 }
 
-export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
+export const Rectangle = ({
+  width,
+  height,
+  round = 2,
+  translate = [0, 0],
+  ...rest
+}) => {
+  const path =
+    'm' +
+    -(width / 2) +
+    ',' +
+    -(height / 2) +
+    'l' +
+    width +
+    ',' +
+    0 +
+    'l' +
+    0 +
+    ',' +
+    height +
+    'l' +
+    -width +
+    ',' +
+    0 +
+    'l' +
+    0 +
+    ',' +
+    -height +
+    'z'
+  return <path d={GeneratePath(path, round, translate)} {...rest} />
+}
+
+export const Sector = ({
+  angleFrom,
+  angleTo,
+  outerRadius,
+  translate = [0, 0],
+  ...rest
+}) => {
   const innerRadius = 0
-  return Annulus({ angleFrom, angleTo, innerRadius, outerRadius, ...rest })
+  return Annulus({
+    angleFrom,
+    angleTo,
+    innerRadius,
+    outerRadius,
+    translate,
+    ...rest
+  })
 }
 
-function returnDots(circles, distance, dotsRadius, rest) {
+function returnDots(circles, distance, dotsRadius, translate = [0, 0], rest) {
   return (
     <g key='dots'>
       {circles.flatMap((rowCircles, row) => (
@@ -111,8 +150,8 @@ function returnDots(circles, distance, dotsRadius, rest) {
             <circle
               key={`dot-column-${row}-${column}`}
               r={dotsRadius}
-              cx={circle.x * distance}
-              cy={circle.y * distance}
+              cx={circle.x * distance + translate[0]}
+              cy={circle.y * distance + translate[1]}
               {...rest}
             />
           ))}
@@ -122,7 +161,13 @@ function returnDots(circles, distance, dotsRadius, rest) {
   )
 }
 
-export const Triangle = ({ positions, size, ...rest }) => {
+export const Triangle = ({
+  positions,
+  size,
+  round = 2,
+  translate = [0, 0],
+  ...rest
+}) => {
   const path =
     positions
       .map((position, index) => {
@@ -131,10 +176,16 @@ export const Triangle = ({ positions, size, ...rest }) => {
       })
       .join('') + 'z'
 
-  return <path d={path} {...rest} />
+  return <path d={GeneratePath(path, round, translate)} {...rest} />
 }
 
-export const Lozenge = ({ width = 1, height = 3, ...rest }) => {
+export const Lozenge = ({
+  width = 1,
+  height = 3,
+  round = 2,
+  translate = [0, 0],
+  ...rest
+}) => {
   return (
     <Triangle
       positions={[
@@ -143,6 +194,8 @@ export const Lozenge = ({ width = 1, height = 3, ...rest }) => {
         { x: -width, y: height },
         { x: -width, y: -height }
       ]}
+      round={round}
+      translate={translate}
       {...rest}
     />
   )
@@ -155,6 +208,7 @@ export const AnnulusDots = ({
   outerRadius,
   distance,
   inner = false,
+  translate = [0, 0],
   ...rest
 }) => {
   const firstColumn = innerRadius / distance
@@ -196,10 +250,10 @@ export const AnnulusDots = ({
       circles.push(column)
     }
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius, translate, rest)
 }
 
-export const ArcDots = ({ box, distance, ...rest }) => {
+export const ArcDots = ({ box, distance, translate = [0, 0], ...rest }) => {
   const width = box / 3
   const height = box / 2
   const columns = width / distance
@@ -250,10 +304,16 @@ export const ArcDots = ({ box, distance, ...rest }) => {
     circles.push(row)
   }
 
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius, translate, rest)
 }
 
-export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
+export const CircleDots = ({
+  radius,
+  distance,
+  inner = false,
+  translate = [0, 0],
+  ...rest
+}) => {
   let columns = radius / distance
   const dotsRadius = distance / 6
 
@@ -277,7 +337,7 @@ export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
     }
     circles.push(column)
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius, translate, rest)
 }
 
 export const RectangleDots = ({
@@ -285,6 +345,7 @@ export const RectangleDots = ({
   height,
   distance,
   inner = false,
+  translate = [0, 0],
   ...rest
 }) => {
   let columns = width / distance
@@ -311,7 +372,7 @@ export const RectangleDots = ({
     }
     circles.push(row)
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius, translate, rest)
 }
 
 export const SectorDots = ({
@@ -320,6 +381,7 @@ export const SectorDots = ({
   outerRadius,
   distance,
   inner = false,
+  translate = [0, 0],
   ...rest
 }) => {
   const innerRadius = 0
@@ -329,6 +391,7 @@ export const SectorDots = ({
     innerRadius,
     outerRadius,
     distance,
+    translate,
     ...rest
   })
 }
@@ -340,6 +403,7 @@ export const RectangleLines = ({
   xLines = true,
   yLines = true,
   inner = false,
+  translate = [0, 0],
   ...rest
 }) => {
   let columns = width / distance

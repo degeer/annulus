@@ -12,7 +12,7 @@ import {
   RectangleLines
 } from 'annulus'
 
-const WhitespaceLogo = ({
+const WhitespaceLogoOptimize = ({
   dots = false,
   dotDistance = 1 / 24,
   lines = false
@@ -24,8 +24,8 @@ const WhitespaceLogo = ({
     //   y * elementSize * 0.5
     // })`
     return [
-      elementSize / 3 + x * elementSize * 0.5,
-      y * elementSize * 0.5,
+      x * elementSize * 0.5,
+      y * elementSize * 0.5 - elementSize / 2,
       rotate ? rotate : 0
     ]
   }
@@ -50,8 +50,8 @@ const WhitespaceLogo = ({
   let WS3 = `var(--color-ws-blue)`
 
   let WSSize = {
-    width: elementSize * 12,
-    height: elementSize * 3
+    width: 68,
+    height: elementSize * 2
   }
 
   let WSDistance = elementSize * dotDistance
@@ -73,7 +73,7 @@ const WhitespaceLogo = ({
             distance={elementSize / 6}
             style={{
               stroke: color10,
-              strokeWidth: `0.1`
+              strokeWidth: `0.01`
             }}
             transform={`translate(${WSSize.width / 2}, ${WSSize.height / 2})`}
           />
@@ -341,4 +341,4 @@ const WhitespaceLogo = ({
   )
 }
 
-export default WhitespaceLogo
+export default WhitespaceLogoOptimize

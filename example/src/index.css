@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* // let WS1 = `#ff5100`
+// let WS2 = `#f7b018`
+// let WS3 = `#215da6`
+
+let WS1 = `var(--color-ws-orange)`
+let WS2 = `var(--color-ws-blue)`
+let WS3 = `var(--color-ws-red)`' */
+:root {
+  --color-ws-yellow: hsl(41, 93%, 53%);
+  --color-ws-orange: hsl(19, 100%, 50%);
+  --color-ws-blue: hsl(213, 67%, 39%);
+  --color-logo-space: rgba(0, 0, 90, 0.1);
+}
