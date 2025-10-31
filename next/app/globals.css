@@ -1,0 +1,86 @@
+@font-face {
+  font-family: Suisse;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-Regular-subset.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: Suisse;
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-SemiBold-subset.woff2') format('woff2');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Suisse, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fff;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:root {
+  --color-ws-yellow: hsl(41, 93%, 53%);
+  --color-ws-orange: hsl(19, 100%, 50%);
+  --color-ws-blue: hsl(213, 67%, 39%);
+  --color-logo-space: rgba(0, 0, 90, 0.1);
+}
+
+.elements svg {
+  width: 20%;
+  vertical-align: top;
+  margin-top: 2%;
+  margin-right: 2%;
+}
+
+.squares {
+  padding: 1vw;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 1vw;
+}
+
+.squares svg {
+  background-color: #fff;
+  border: solid 1px #ccc;
+}
+
+g g circle {
+  fill: #000;
+}
+
+.elements-all {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 690px;
+}
+
+@page {
+  size: 10cm 5.6cm;
+}
