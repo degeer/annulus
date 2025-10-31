@@ -1,4 +1,4 @@
-import { Annulus, Arc, Circle, Rectangle, Sector, RectangleDots } from 'annulus'
+import { Annulus, Arc, Circle, Rectangle, Sector, RectangleDots } from './index'
 
 describe('Annulus', () => {
   it('is truthy', () => {
