@@ -152,6 +152,7 @@ function returnDots(circles, distance, dotsRadius, translate = [0, 0], rest) {
               r={dotsRadius}
               cx={circle.x * distance + translate[0]}
               cy={circle.y * distance + translate[1]}
+              fill={`#000`}
               {...rest}
             />
           ))}

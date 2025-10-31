@@ -12,7 +12,7 @@ import {
   RectangleLines
 } from 'annulus'
 
-const WhitespaceLogo = ({
+const WhitespaceElements = ({
   dots = false,
   dotDistance = 1 / 24,
   lines = false
@@ -24,8 +24,8 @@ const WhitespaceLogo = ({
     //   y * elementSize * 0.5
     // })`
     return [
-      elementSize / 3 + x * elementSize * 0.5,
-      y * elementSize * 0.5,
+      x * elementSize * 0.5,
+      y * elementSize * 0.5 - elementSize / 2,
       rotate ? rotate : 0
     ]
   }
@@ -35,7 +35,7 @@ const WhitespaceLogo = ({
   //     y * elementSize * 0.5
   //   })`
   // }
-  // let dotsColor = `#000`
+  let dotsColor = `#000`
 
   const color10 = `#000`
 
@@ -50,8 +50,8 @@ const WhitespaceLogo = ({
   let WS3 = `var(--color-ws-blue)`
 
   let WSSize = {
-    width: elementSize * 12,
-    height: elementSize * 3
+    width: 68,
+    height: elementSize * 2
   }
 
   let WSDistance = elementSize * dotDistance
@@ -59,6 +59,88 @@ const WhitespaceLogo = ({
   let displayClassName = false
   return (
     <>
+      <div className={`elements`}>
+        <svg
+          viewBox={`0 0 ${6} ${6}`}
+          xmlns={`http://www.w3.org/2000/svg`}
+          fill={`none`}
+          aria-hidden={`true`}
+        >
+          <Circle
+            radius={elementSize / 2}
+            fill={WS1}
+            translate={position(1, 2)}
+          />
+        </svg>
+        <svg
+          viewBox={`0 0 ${3} ${3}`}
+          xmlns={`http://www.w3.org/2000/svg`}
+          fill={`none`}
+          aria-hidden={`true`}
+        >
+          <Annulus
+            className={displayClassName && `S`}
+            fill={WS3}
+            angleFrom={180}
+            angleTo={270}
+            // distance={WSDistance}
+            innerRadius={elementSize / 6}
+            outerRadius={elementSize / 2}
+            translate={position(1, 1)}
+          />
+        </svg>
+        <svg
+          viewBox={`0 0 ${6} ${3}`}
+          xmlns={`http://www.w3.org/2000/svg`}
+          fill={`none`}
+          aria-hidden={`true`}
+        >
+          <Annulus
+            className={displayClassName && `S`}
+            fill={WS2}
+            angleFrom={-90}
+            angleTo={90}
+            // distance={WSDistance}
+            innerRadius={elementSize / 6}
+            outerRadius={elementSize / 2}
+            translate={position(1, 2)}
+          />
+        </svg>
+        <svg
+          viewBox={`0 0 ${6} ${6}`}
+          xmlns={`http://www.w3.org/2000/svg`}
+          fill={`none`}
+          aria-hidden={`true`}
+        >
+          <Annulus
+            className={displayClassName && `S`}
+            fill={WS1}
+            angleFrom={0}
+            angleTo={360}
+            // distance={WSDistance}
+            innerRadius={elementSize / 6}
+            outerRadius={elementSize / 2}
+            translate={position(1, 2)}
+          />
+        </svg>
+        <svg
+          viewBox={`0 0 ${3} ${3}`}
+          xmlns={`http://www.w3.org/2000/svg`}
+          fill={`none`}
+          aria-hidden={`true`}
+        >
+          <Annulus
+            className={displayClassName && `S`}
+            fill={WS3}
+            angleFrom={270}
+            angleTo={360}
+            // distance={WSDistance}
+            innerRadius={elementSize / 6}
+            outerRadius={elementSize / 2}
+            translate={position(1, 2)}
+          />
+        </svg>
+      </div>
       <svg
         viewBox={`0 0 ${WSSize.width} ${WSSize.height}`}
         xmlns={`http://www.w3.org/2000/svg`}
@@ -73,7 +155,7 @@ const WhitespaceLogo = ({
             distance={elementSize / 6}
             style={{
               stroke: color10,
-              strokeWidth: `0.1`
+              strokeWidth: `0.01`
             }}
             transform={`translate(${WSSize.width / 2}, ${WSSize.height / 2})`}
           />
@@ -85,7 +167,7 @@ const WhitespaceLogo = ({
           translate={position(11 + 1 / 3, 3)}
         /> */}
         <Arc
-          className={displayClassName ? `W` : ``}
+          className={displayClassName && `W`}
           box={elementSize}
           fill={WS3}
           translate={position(1, 3)}
@@ -104,7 +186,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Arc
-          className={displayClassName ? `H` : ``}
+          className={displayClassName && `H`}
           box={elementSize}
           fill={WS2}
           translate={position(5 - 1 / 3, 3, 180)}
@@ -126,7 +208,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Rectangle
-          className={displayClassName ? `I` : ``}
+          className={displayClassName && `I`}
           fill={WS1}
           width={elementSize / 3}
           height={elementSize}
@@ -146,7 +228,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Rectangle
-          className={displayClassName ? `T` : ``}
+          className={displayClassName && `T`}
           fill={WS3}
           width={(elementSize * 2) / 3}
           height={elementSize / 3}
@@ -169,7 +251,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Annulus
-          className={displayClassName ? `E` : ``}
+          className={displayClassName && `E`}
           fill={WS1}
           angleFrom={180}
           angleTo={270}
@@ -198,7 +280,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Annulus
-          className={displayClassName ? `S` : ``}
+          className={displayClassName && `S`}
           fill={WS3}
           angleFrom={-90}
           angleTo={90}
@@ -227,7 +309,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Annulus
-          className={displayClassName ? `P` : ``}
+          className={displayClassName && `P`}
           fill={WS2}
           angleFrom={0}
           angleTo={360}
@@ -252,7 +334,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Rectangle
-          className={displayClassName ? `A` : ``}
+          className={displayClassName && `A`}
           fill={WS1}
           width={elementSize / 3}
           height={elementSize}
@@ -279,7 +361,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Annulus
-          className={displayClassName ? `C` : ``}
+          className={displayClassName && `C`}
           fill={WS3}
           angleFrom={-45}
           angleTo={45}
@@ -308,7 +390,7 @@ const WhitespaceLogo = ({
           />
         )}
         <Annulus
-          className={displayClassName ? `E` : ``}
+          className={displayClassName && `E`}
           fill={WS2}
           angleFrom={180}
           angleTo={270}
@@ -341,4 +423,4 @@ const WhitespaceLogo = ({
   )
 }
 
-export default WhitespaceLogo
+export default WhitespaceElements

@@ -51,6 +51,7 @@
     "dist"
   ],
   "dependencies": {
+    "caniuse-lite": "^1.0.30001593",
     "d3-shape": "^2.0.0",
     "svgpath": "^2.3.1"
   }
