@@ -1,7 +1,6 @@
 import {
   annulusPath,
   arcPath,
-  circlePath,
   rectanglePath,
   sectorPath,
   annulusDots,
@@ -12,8 +11,19 @@ import {
   rectangleLines
 } from './index.js'
 
-export function Annulus({ angleFrom, angleTo, innerRadius, outerRadius, ...rest }) {
-  return <path d={annulusPath({ angleFrom, angleTo, innerRadius, outerRadius })} {...rest} />
+export function Annulus({
+  angleFrom,
+  angleTo,
+  innerRadius,
+  outerRadius,
+  ...rest
+}) {
+  return (
+    <path
+      d={annulusPath({ angleFrom, angleTo, innerRadius, outerRadius })}
+      {...rest}
+    />
+  )
 }
 
 export function Arc({ box, ...rest }) {
@@ -38,7 +48,13 @@ function renderDots({ circles, distance, dotsRadius }, rest) {
       {circles.map((row, ri) => (
         <g key={ri}>
           {row.map(({ x, y }, ci) => (
-            <circle key={`${ri}-${ci}`} r={dotsRadius} cx={x * distance} cy={y * distance} {...rest} />
+            <circle
+              key={`${ri}-${ci}`}
+              r={dotsRadius}
+              cx={x * distance}
+              cy={y * distance}
+              {...rest}
+            />
           ))}
         </g>
       ))}
@@ -55,7 +71,17 @@ export function AnnulusDots({
   inner,
   ...rest
 }) {
-  return renderDots(annulusDots({ angleFrom, angleTo, innerRadius, outerRadius, distance, inner }), rest)
+  return renderDots(
+    annulusDots({
+      angleFrom,
+      angleTo,
+      innerRadius,
+      outerRadius,
+      distance,
+      inner
+    }),
+    rest
+  )
 }
 
 export function ArcDots({ box, distance, ...rest }) {
@@ -70,8 +96,18 @@ export function RectangleDots({ width, height, distance, inner, ...rest }) {
   return renderDots(rectangleDots({ width, height, distance, inner }), rest)
 }
 
-export function SectorDots({ angleFrom, angleTo, outerRadius, distance, inner, ...rest }) {
-  return renderDots(sectorDots({ angleFrom, angleTo, outerRadius, distance, inner }), rest)
+export function SectorDots({
+  angleFrom,
+  angleTo,
+  outerRadius,
+  distance,
+  inner,
+  ...rest
+}) {
+  return renderDots(
+    sectorDots({ angleFrom, angleTo, outerRadius, distance, inner }),
+    rest
+  )
 }
 
 export function RectangleLines({
@@ -83,7 +119,14 @@ export function RectangleLines({
   inner,
   ...rest
 }) {
-  const { lines, distance: d } = rectangleLines({ width, height, distance, xLines, yLines, inner })
+  const { lines, distance: d } = rectangleLines({
+    width,
+    height,
+    distance,
+    xLines,
+    yLines,
+    inner
+  })
   return (
     <g {...rest}>
       {lines.map((line, i) => (

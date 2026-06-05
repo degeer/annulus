@@ -17,7 +17,8 @@
   },
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "detect",
+      "jsxRuntime": "automatic"
     }
   },
   "rules": {
@@ -26,6 +27,7 @@
     "react/jsx-handler-names": 0,
     "react/jsx-fragments": 0,
     "react/no-unused-prop-types": 0,
+    "react/react-in-jsx-scope": 0,
     "import/export": 0
   }
 }

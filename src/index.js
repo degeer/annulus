@@ -11,33 +11,37 @@ export function annulusPath({ angleFrom, angleTo, innerRadius, outerRadius }) {
 }
 
 export function arcPath({ box }) {
-  const gen = d3Symbol().type({
-    draw(context, size) {
-      const r = size / 6
-      const a = 0
-      const b = size
-      const c = size / 2 - r
-      const d = size / 2 + r
-      const e = size / 2
+  const gen = d3Symbol()
+    .type({
+      draw(context, size) {
+        const r = size / 6
+        const a = 0
+        const b = size
+        const c = size / 2 - r
+        const d = size / 2 + r
+        const e = size / 2
 
-      context.moveTo(a, a)
-      context.lineTo(a, e)
-      context.arcTo(a, b, b, b, r * 3)
-      context.arcTo(b, b, b, a, r * 3)
-      context.lineTo(b, a)
-      context.lineTo(d, a)
-      context.lineTo(d, e)
+        context.moveTo(a, a)
+        context.lineTo(a, e)
+        context.arcTo(a, b, b, b, r * 3)
+        context.arcTo(b, b, b, a, r * 3)
+        context.lineTo(b, a)
+        context.lineTo(d, a)
+        context.lineTo(d, e)
 
-      context.arcTo(d, d, c, d, r)
-      context.arcTo(c, d, c, c, r)
+        context.arcTo(d, d, c, d, r)
+        context.arcTo(c, d, c, c, r)
 
-      context.lineTo(c, a)
+        context.lineTo(c, a)
 
-      context.closePath()
-    }
-  }).size(box)
+        context.closePath()
+      }
+    })
+    .size(box)
 
-  return svgpath(gen()).translate(-box / 2, -box / 2).toString()
+  return svgpath(gen())
+    .translate(-box / 2, -box / 2)
+    .toString()
 }
 
 export function circlePath({ radius }) {
@@ -71,7 +75,7 @@ export function annulusDots({
   distance,
   inner = false
 }) {
-  let firstColumn = innerRadius / distance
+  const firstColumn = innerRadius / distance
   let columns = outerRadius / distance
   const dotsRadius = distance / 6
   const circles = innerRadius === 0 ? [[{ x: 0, y: 0 }]] : []
@@ -193,8 +197,21 @@ export function rectangleDots({ width, height, distance, inner = false }) {
   return returnDots(circles, distance, dotsRadius)
 }
 
-export function sectorDots({ angleFrom, angleTo, outerRadius, distance, inner = false }) {
-  return annulusDots({ angleFrom, angleTo, innerRadius: 0, outerRadius, distance, inner })
+export function sectorDots({
+  angleFrom,
+  angleTo,
+  outerRadius,
+  distance,
+  inner = false
+}) {
+  return annulusDots({
+    angleFrom,
+    angleTo,
+    innerRadius: 0,
+    outerRadius,
+    distance,
+    inner
+  })
 }
 
 export function rectangleLines({
