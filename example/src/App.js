@@ -12,11 +12,11 @@ import {
   RectangleDots,
   SectorDots,
   RectangleLines
-} from 'annulus'
+} from 'annulus/react'
 
 const App = () => {
-  let elementSize = 256 * 2
-  let size = {
+  const elementSize = 256 * 2
+  const size = {
     width: elementSize * 3,
     height: elementSize * 2
   }

@@ -1,57 +1,64 @@
 {
   "name": "annulus",
-  "version": "1.1.0",
-  "description": "Annulus, sector, rectangle, circle and other elements.",
+  "version": "2.0.0",
+  "description": "Annulus, sector, rectangle, circle and other geometric SVG elements.",
   "author": "degeer",
   "license": "MIT",
   "repository": "degeer/annulus",
   "main": "dist/index.js",
-  "module": "dist/index.modern.js",
+  "module": "dist/index.modern.mjs",
   "source": "src/index.js",
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle --no-compress --format modern,cjs --entry src/index.js --entry src/react.js --external react,react-dom --jsxImportSource react",
+    "watch": "microbundle watch --no-compress --format modern,cjs --entry src/index.js --entry src/react.js --external react,react-dom --jsxImportSource react",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint .",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom",
-    "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "test:watch": "react-scripts test --env=jsdom"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-config-standard-react": "^9.2.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "gh-pages": "^2.2.0",
-    "microbundle-crl": "^0.13.10",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-config-standard-react": "^13.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^5.2.0",
+    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.3.0",
+    "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "prettier": "^3.4.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "^5.0.1"
+  },
+  "dependencies": {
+    "d3-shape": "^3.2.0",
+    "svgpath": "^2.6.0"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(d3-shape|d3-path)/)"
+    ]
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "d3-shape": "^2.0.0",
-    "svgpath": "^2.3.1"
-  }
+  ]
 }

@@ -1,156 +1,85 @@
-import { arc, symbol } from 'd3-shape'
-import React from 'react'
+import { arc as d3Arc, symbol as d3Symbol } from 'd3-shape'
 import svgpath from 'svgpath'
 
-export const Annulus = ({
-  angleFrom,
-  angleTo,
-  innerRadius,
-  outerRadius,
-  ...rest
-}) => {
-  return (
-    <path
-      d={arc()({
-        startAngle: (angleFrom * Math.PI) / 180,
-        endAngle: (angleTo * Math.PI) / 180,
-        innerRadius: innerRadius,
-        outerRadius: outerRadius
-      })}
-      {...rest}
-    />
-  )
+export function annulusPath({ angleFrom, angleTo, innerRadius, outerRadius }) {
+  return d3Arc()({
+    startAngle: (angleFrom * Math.PI) / 180,
+    endAngle: (angleTo * Math.PI) / 180,
+    innerRadius,
+    outerRadius
+  })
 }
 
-export const Arc = ({ box, ...rest }) => {
-  const symbolGenerator = symbol()
-    .type({
-      draw: function (context, box) {
-        const r = box / 6
+export function arcPath({ box }) {
+  const gen = d3Symbol().type({
+    draw(context, size) {
+      const r = size / 6
+      const a = 0
+      const b = size
+      const c = size / 2 - r
+      const d = size / 2 + r
+      const e = size / 2
 
-        const a = 0
-        const b = box
-        const c = box / 2 + -r
-        const d = box / 2 + r
-        const e = box / 2
+      context.moveTo(a, a)
+      context.lineTo(a, e)
+      context.arcTo(a, b, b, b, r * 3)
+      context.arcTo(b, b, b, a, r * 3)
+      context.lineTo(b, a)
+      context.lineTo(d, a)
+      context.lineTo(d, e)
 
-        context.moveTo(a, a)
-        context.lineTo(a, e)
-        context.arcTo(a, b, b, b, r * 3)
-        context.arcTo(b, b, b, a, r * 3)
-        context.lineTo(b, a)
-        context.lineTo(d, a)
-        context.lineTo(d, e)
+      context.arcTo(d, d, c, d, r)
+      context.arcTo(c, d, c, c, r)
 
-        context.arcTo(d, d, c, d, r)
-        context.arcTo(c, d, c, c, r)
+      context.lineTo(c, a)
 
-        context.lineTo(c, a)
+      context.closePath()
+    }
+  }).size(box)
 
-        context.closePath()
-      }
-    })
-    .size(box)
-
-  return (
-    <path
-      d={svgpath(symbolGenerator())
-        .translate(-box / 2, -box / 2)
-        .toString()}
-      {...rest}
-    />
-  )
+  return svgpath(gen()).translate(-box / 2, -box / 2).toString()
 }
 
-export const Circle = ({ radius, ...rest }) => {
-  return <circle r={radius} {...rest} />
+export function circlePath({ radius }) {
+  return d3Arc()({
+    startAngle: 0,
+    endAngle: 2 * Math.PI,
+    innerRadius: 0,
+    outerRadius: radius
+  })
 }
 
-export const Rectangle = ({ width, height, ...rest }) => {
-  return (
-    <path
-      d={
-        'm' +
-        -(width / 2) +
-        ',' +
-        -(height / 2) +
-        'l' +
-        width +
-        ',' +
-        0 +
-        'l' +
-        0 +
-        ',' +
-        height +
-        'l' +
-        -width +
-        ',' +
-        0 +
-        'l' +
-        0 +
-        ',' +
-        -height +
-        'z'
-      }
-      {...rest}
-    />
-  )
+export function rectanglePath({ width, height }) {
+  const hw = width / 2
+  const hh = height / 2
+  return `M${-hw},${-hh}l${width},0l0,${height}l${-width},0z`
 }
 
-export const Sector = ({ angleFrom, angleTo, outerRadius, ...rest }) => {
-  const innerRadius = 0
-  return Annulus({ angleFrom, angleTo, innerRadius, outerRadius, ...rest })
+export function sectorPath({ angleFrom, angleTo, outerRadius }) {
+  return annulusPath({ angleFrom, angleTo, innerRadius: 0, outerRadius })
 }
 
-function returnDots(circles, distance, dotsRadius, rest) {
-  return (
-    <g key='dots'>
-      {circles.map(({}, row) => {
-        return (
-          <g key={`dot-row-${row}`}>
-            {circles[row].map((circle, column) => {
-              return (
-                <circle
-                  key={`dot-column-${row}-${column}`}
-                  r={dotsRadius}
-                  cx={circle.x * distance}
-                  cy={circle.y * distance}
-                  {...rest}
-                />
-              )
-            })}
-          </g>
-        )
-      })}
-    </g>
-  )
+function returnDots(circles, distance, dotsRadius) {
+  return { circles, distance, dotsRadius }
 }
 
-export const AnnulusDots = ({
+export function annulusDots({
   angleFrom,
   angleTo,
   innerRadius,
   outerRadius,
   distance,
-  inner = false,
-  ...rest
-}) => {
-  const firstColumn = innerRadius / distance
+  inner = false
+}) {
+  let firstColumn = innerRadius / distance
   let columns = outerRadius / distance
   const dotsRadius = distance / 6
   const circles = innerRadius === 0 ? [[{ x: 0, y: 0 }]] : []
 
-  if (angleFrom < 0) {
-    angleFrom = 360 + angleFrom
-  }
+  if (angleFrom < 0) angleFrom = 360 + angleFrom
+  if (angleTo < 0) angleTo = 360 + angleTo
 
-  if (angleTo < 0) {
-    angleTo = 360 + angleTo
-  }
-
-  if (inner) {
-    columns -= 1
-  }
+  if (inner) columns -= 1
 
   for (let y = firstColumn; y <= columns; y++) {
     const column = []
@@ -158,7 +87,6 @@ export const AnnulusDots = ({
 
     for (let x = 0; x < points; x++) {
       const angle = (360 * x) / points
-
       if (
         (angleTo > angleFrom && angle >= angleFrom && angle <= angleTo) ||
         (angleFrom >= angleTo && (angle >= angleFrom || angle <= angleTo)) ||
@@ -170,39 +98,30 @@ export const AnnulusDots = ({
         })
       }
     }
-    if (column.length !== 0) {
-      circles.push(column)
-    }
+    if (column.length !== 0) circles.push(column)
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius)
 }
 
-export const ArcDots = ({ box, distance, ...rest }) => {
+export function arcDots({ box, distance }) {
   const width = box / 3
   const height = box / 2
   const columns = width / distance
   const rows = height / distance
   const dotsRadius = distance / 6
-
   const circles = []
 
   for (let y = 0; y <= rows; y++) {
     const row = []
-
     for (let x = 0; x <= columns; x++) {
-      row.push({
-        x: -x - columns / 2,
-        y: -y
-      })
+      row.push({ x: -x - columns / 2, y: -y })
     }
-
     circles.push(row)
   }
 
   for (let y = rows - columns; y <= rows; y++) {
     const max = y === 0 ? 1 : y * 6
     const row = []
-
     for (let x = 0; x < max; x++) {
       const calc = (1 + x) / max
       if (360 * calc >= 0 && 360 * calc < 180) {
@@ -217,37 +136,27 @@ export const ArcDots = ({ box, distance, ...rest }) => {
 
   for (let y = 0; y <= rows; y++) {
     const row = []
-
     for (let x = 0; x <= columns; x++) {
-      row.push({
-        x: x + columns / 2,
-        y: -y
-      })
+      row.push({ x: x + columns / 2, y: -y })
     }
-
     circles.push(row)
   }
 
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius)
 }
 
-export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
+export function circleDots({ radius, distance, inner = false }) {
   let columns = radius / distance
   const dotsRadius = distance / 6
-
   const circles = [[{ x: 0, y: 0 }]]
 
-  if (inner) {
-    columns -= 1
-  }
+  if (inner) columns -= 1
 
   for (let y = 0; y <= columns; y++) {
     const column = []
     const points = y * 8
-
     for (let x = 0; x < points; x++) {
       const angle = x / points
-
       column.push({
         x: y * Math.sin(Math.PI * 2 * angle),
         y: y * Math.cos(Math.PI * 2 * angle)
@@ -255,20 +164,13 @@ export const CircleDots = ({ radius, distance, inner = false, ...rest }) => {
     }
     circles.push(column)
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius)
 }
 
-export const RectangleDots = ({
-  width,
-  height,
-  distance,
-  inner = false,
-  ...rest
-}) => {
+export function rectangleDots({ width, height, distance, inner = false }) {
   let columns = width / distance
   let rows = height / distance
   const dotsRadius = distance / 6
-
   const circles = []
   const rowsStart = rows / 2
   const columnsStart = columns / 2
@@ -280,49 +182,31 @@ export const RectangleDots = ({
 
   for (let y = 0; y <= rows; y++) {
     const row = []
-
     for (let x = 0; x <= columns; x++) {
       row.push({
-        x: x - columnsStart + (inner ? 1 / 2 : 0),
-        y: y - rowsStart + (inner ? 1 / 2 : 0)
+        x: x - columnsStart + (inner ? 0.5 : 0),
+        y: y - rowsStart + (inner ? 0.5 : 0)
       })
     }
     circles.push(row)
   }
-  return returnDots(circles, distance, dotsRadius, rest)
+  return returnDots(circles, distance, dotsRadius)
 }
 
-export const SectorDots = ({
-  angleFrom,
-  angleTo,
-  outerRadius,
-  distance,
-  inner = false,
-  ...rest
-}) => {
-  const innerRadius = 0
-  return AnnulusDots({
-    angleFrom,
-    angleTo,
-    innerRadius,
-    outerRadius,
-    distance,
-    ...rest
-  })
+export function sectorDots({ angleFrom, angleTo, outerRadius, distance, inner = false }) {
+  return annulusDots({ angleFrom, angleTo, innerRadius: 0, outerRadius, distance, inner })
 }
 
-export const RectangleLines = ({
+export function rectangleLines({
   width,
   height,
   distance,
   xLines = true,
   yLines = true,
-  inner = false,
-  ...rest
-}) => {
+  inner = false
+}) {
   let columns = width / distance
   let rows = height / distance
-
   const lines = []
   const rowsStart = rows / 2
   const columnsStart = columns / 2
@@ -335,9 +219,9 @@ export const RectangleLines = ({
   if (xLines) {
     for (let x = 0; x <= columns; x++) {
       lines.push({
-        x1: x - columnsStart + (inner ? 1 / 2 : 0),
+        x1: x - columnsStart + (inner ? 0.5 : 0),
         y1: -rows / 2,
-        x2: x - columnsStart + (inner ? 1 / 2 : 0),
+        x2: x - columnsStart + (inner ? 0.5 : 0),
         y2: rows / 2
       })
     }
@@ -347,26 +231,12 @@ export const RectangleLines = ({
     for (let y = 0; y <= rows; y++) {
       lines.push({
         x1: -columns / 2,
-        y1: y - rowsStart + (inner ? 1 / 2 : 0),
+        y1: y - rowsStart + (inner ? 0.5 : 0),
         x2: columns / 2,
-        y2: y - rowsStart + (inner ? 1 / 2 : 0)
+        y2: y - rowsStart + (inner ? 0.5 : 0)
       })
     }
   }
 
-  return (
-    <g key='lines' {...rest}>
-      {lines.map((line, key) => {
-        return (
-          <line
-            key={`line-${key}`}
-            x1={line.x1 * distance}
-            y1={line.y1 * distance}
-            x2={line.x2 * distance}
-            y2={line.y2 * distance}
-          />
-        )
-      })}
-    </g>
-  )
+  return { lines, distance }
 }
